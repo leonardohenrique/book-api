@@ -1,6 +1,7 @@
 package com.example.bookapi.book;
 
 import com.example.bookapi.author.Author;
+import com.example.bookapi.genre.Genre;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,10 +10,12 @@ import java.util.Set;
 
 @Data
 @Entity
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
 
     @ManyToOne
@@ -20,12 +23,8 @@ public class Book {
     private Author author;
 
     @ManyToMany
-    @JoinTable(
-            name = "book_genre",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
-    private Set<com.example.bookapi.genre.Genre> genres = new HashSet<>();
+    @JoinTable(name = "book_genres", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<Genre> genres = new HashSet<>();
 
     private int year;
 }
