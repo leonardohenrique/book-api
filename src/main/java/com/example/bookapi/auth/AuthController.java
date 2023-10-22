@@ -1,15 +1,16 @@
 package com.example.bookapi.auth;
 
-import com.example.bookapi.auth.dto.LoginDTO;
-import com.example.bookapi.auth.dto.TokenDTO;
+import com.example.bookapi.auth.dto.AuthToken;
+import com.example.bookapi.auth.dto.Credentials;
+import com.example.bookapi.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,8 +20,8 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/login")
-    public TokenDTO login(@RequestBody LoginDTO loginDTO) {
-        return service.login(loginDTO);
+    public AuthToken login(@RequestBody Credentials credentials) {
+        return service.login(credentials);
     }
 
     public void logout() {
@@ -28,8 +29,8 @@ public class AuthController {
     }
 
     @GetMapping("/user")
-    public Authentication user() {
-        return SecurityContextHolder.getContext().getAuthentication();
+    public Optional<User> getUser() {
+        return service.getUser();
     }
 
     @PostMapping("/refresh")

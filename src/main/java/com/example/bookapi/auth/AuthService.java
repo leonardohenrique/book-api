@@ -1,7 +1,7 @@
 package com.example.bookapi.auth;
 
-import com.example.bookapi.auth.dto.LoginDTO;
-import com.example.bookapi.auth.dto.TokenDTO;
+import com.example.bookapi.auth.dto.AuthToken;
+import com.example.bookapi.auth.dto.Credentials;
 import com.example.bookapi.user.entity.User;
 import com.example.bookapi.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +29,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
-    public TokenDTO login(LoginDTO loginDTO) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+    public AuthToken login(Credentials credentials) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        var user = userRepository.findByUsername(loginDTO.getUsername()).orElseThrow();
+        var user = userRepository.findByUsername(credentials.getUsername()).orElseThrow();
 
         var accessToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -41,7 +42,7 @@ public class AuthService {
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
 
-        return new TokenDTO(accessToken, refreshToken);
+        return new AuthToken(accessToken, refreshToken, user);
     }
 
     private void saveUserToken(User user, String accessToken) {
@@ -76,8 +77,14 @@ public class AuthService {
             var accessToken = jwtService.generateToken(user);
             revokeAllUserTokens(user);
             saveUserToken(user, accessToken);
-            var authResponse = new TokenDTO(accessToken, refreshToken);
+            var authResponse = new AuthToken(accessToken, refreshToken, user);
             new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
         }
+    }
+
+    public Optional<User> getUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var username = (String) authentication.getPrincipal();
+        return userRepository.findByUsername(username);
     }
 }
