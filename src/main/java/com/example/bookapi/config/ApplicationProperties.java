@@ -29,7 +29,12 @@ public class ApplicationProperties {
     @Data
     public static class CorsProperties {
         private Boolean allowCredentials = true;
-        private List<String> allowedOrigins = List.of("http://localhost:4200", "http://127.0.0.1:4200");
+        private List<String> allowedOrigins = List.of(
+                "http://localhost:4200",
+                "http://127.0.0.1:4200",
+                "http://localhost:3000",
+                "http://127.0.0.1:3000"
+        );
         private List<String> allowedMethods = List.of("*");
         private List<String> allowedHeaders = List.of("*");
     }
