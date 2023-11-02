@@ -61,4 +61,8 @@ public class UserService implements UserDetailsService {
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
     }
+
+    public List<User> searchByTerm(String term) {
+        return userRepository.searchByTerm(term);
+    }
 }

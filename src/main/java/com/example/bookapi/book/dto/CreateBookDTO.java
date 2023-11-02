@@ -1,7 +1,5 @@
 package com.example.bookapi.book.dto;
 
-import com.example.bookapi.author.Author;
-import com.example.bookapi.genre.Genre;
 import lombok.Data;
 
 import java.util.Set;
@@ -10,7 +8,7 @@ import java.util.Set;
 
 public class CreateBookDTO {
     private String title;
-    private Author author;
-    private Set<Genre> genres;
+    private Long authorId;
+    private Set<Long> genreIds;
     private int year;
 }

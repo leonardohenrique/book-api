@@ -4,9 +4,10 @@ import com.example.bookapi.author.Author;
 import com.example.bookapi.genre.Genre;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,12 +20,13 @@ public class Book {
     private String title;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "book_genres", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private Set<Genre> genres = new HashSet<>();
+    private List<Genre> genres;
 
     private int year;
 }

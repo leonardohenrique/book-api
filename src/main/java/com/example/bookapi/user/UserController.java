@@ -11,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -19,7 +21,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAll() {
+    public List<User> getAll(@RequestParam(required = false) String term) {
+        if (!isEmpty(term)) {
+            return userService.searchByTerm(term);
+        }
         return userService.findAll();
     }
 

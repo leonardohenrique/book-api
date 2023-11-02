@@ -1,19 +1,15 @@
 package com.example.bookapi.book;
 
-import com.example.bookapi.author.Author;
 import com.example.bookapi.author.AuthorRepository;
 import com.example.bookapi.book.dto.CreateBookDTO;
 import com.example.bookapi.book.dto.UpdateBookDTO;
-import com.example.bookapi.genre.Genre;
 import com.example.bookapi.genre.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,24 +30,12 @@ public class BookService {
 
     public Book create(@Validated CreateBookDTO createBookDTO) {
         var book = bookMapper.map(createBookDTO);
+        book.setAuthor(authorRepository.findById(createBookDTO.getAuthorId()).orElseThrow(IllegalArgumentException::new));
 
-        Author author = book.getAuthor();
-        if (author != null && author.getId() == null) {
-            author = authorRepository.save(author);
-            book.setAuthor(author);
+        if (book.getGenres() != null) {
+            book.getGenres().clear();
         }
-
-        Set<Genre> genres = book.getGenres();
-        Set<Genre> existingGenres = new HashSet<>();
-        for (Genre genre : genres) {
-            if (genre.getId() == null) {
-                existingGenres.add(genreRepository.save(genre));
-            } else {
-                existingGenres.add(genre);
-            }
-        }
-
-        book.setGenres(existingGenres);
+        book.setGenres(genreRepository.findAllById(createBookDTO.getGenreIds()));
 
         return bookRepository.save(book);
     }

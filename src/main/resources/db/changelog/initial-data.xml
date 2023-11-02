@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Leonardo">
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="privileges">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="READ_PRIVILEGE"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="WRITE_PRIVILEGE"/>
+        </insert>
+
+        <insert tableName="roles_privileges">
+            <column name="role_id" valueNumeric="1"/>
+            <column name="privilege_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="roles_privileges">
+            <column name="role_id" valueNumeric="1"/>
+            <column name="privilege_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="roles_privileges">
+            <column name="role_id" valueNumeric="2"/>
+            <column name="privilege_id" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Administrator"/>
+            <column name="email" value="admin@test.com"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$S8UfNaACdqpHA1jwk3UQOOBPkGax8buahyQfahFBJZTsw/c1gSGta"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="User"/>
+            <column name="email" value="admin@test.com"/>
+            <column name="username" value="user"/>
+            <column name="password" value="$2a$10$6zncEngx1iVIJ39qMUl0nun746OVAY9G9zfKaskyXNWKbVxMLqJFi"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+
+        <insert tableName="users_roles">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="users_roles">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="genres">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Fantasy"/>
+        </insert>
+        <insert tableName="genres">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Classics"/>
+        </insert>
+        <insert tableName="genres">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Horror"/>
+        </insert>
+
+        <insert tableName="authors">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="J.R.R. Tolkien"/>
+        </insert>
+        <insert tableName="authors">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Bram Stoker"/>
+        </insert>
+
+        <insert tableName="books">
+            <column name="id" valueNumeric="1"/>
+            <column name="title" value="The Hobbit"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="year" valueNumeric="1937"/>
+        </insert>
+        <insert tableName="books">
+            <column name="id" valueNumeric="2"/>
+            <column name="title" value="The Lord of the Rings"/>
+            <column name="author_id" valueNumeric="1"/>
+            <column name="year" valueNumeric="1954"/>
+        </insert>
+        <insert tableName="books">
+            <column name="id" valueNumeric="3"/>
+            <column name="title" value="Dracula"/>
+            <column name="author_id" valueNumeric="2"/>
+            <column name="year" valueNumeric="1897"/>
+        </insert>
+
+        <insert tableName="book_genres">
+            <column name="book_id" valueNumeric="1"/>
+            <column name="genre_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="book_genres">
+            <column name="book_id" valueNumeric="1"/>
+            <column name="genre_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="book_genres">
+            <column name="book_id" valueNumeric="2"/>
+            <column name="genre_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="book_genres">
+            <column name="book_id" valueNumeric="1"/>
+            <column name="genre_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="book_genres">
+            <column name="book_id" valueNumeric="3"/>
+            <column name="genre_id" valueNumeric="3"/>
+        </insert>
+        <insert tableName="book_genres">
+            <column name="book_id" valueNumeric="3"/>
+            <column name="genre_id" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
