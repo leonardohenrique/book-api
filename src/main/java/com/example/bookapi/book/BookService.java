@@ -5,12 +5,15 @@ import com.example.bookapi.book.dto.CreateBookDTO;
 import com.example.bookapi.book.dto.UpdateBookDTO;
 import com.example.bookapi.genre.GenreRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookService {
@@ -29,20 +32,19 @@ public class BookService {
     }
 
     public Book create(@Validated CreateBookDTO createBookDTO) {
+        log.info("Creating book with DTO {}", createBookDTO);
         var book = bookMapper.map(createBookDTO);
-        book.setAuthor(authorRepository.findById(createBookDTO.getAuthorId()).orElseThrow(IllegalArgumentException::new));
-
-        if (book.getGenres() != null) {
-            book.getGenres().clear();
-        }
-        book.setGenres(genreRepository.findAllById(createBookDTO.getGenreIds()));
-
+        log.info("Saving book {}", book);
         return bookRepository.save(book);
     }
 
+
     public Optional<Book> update(Long id, @Validated UpdateBookDTO updateBookDTO) {
+        log.info("Updating book with DTO {}", updateBookDTO);
+
         return bookRepository.findById(id).map((book) -> {
             bookMapper.map(updateBookDTO, book);
+            log.info("Saving book {}", book);
             return bookRepository.save(book);
         });
     }
